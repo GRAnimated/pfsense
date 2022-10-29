@@ -451,15 +451,19 @@ if (isset($_POST['save'])) {
 	}
 
 	// Disallow a range that includes the virtualip
-	if (is_array($config['virtualip']['vip'])) {
-		foreach ($config['virtualip']['vip'] as $vip) {
-			if ($vip['interface'] == $if) {
-				if ($vip['subnet'] && is_inrange_v4($vip['subnet'], $_POST['range_from'], $_POST['range_to'])) {
-					$input_errors[] = sprintf(gettext("The subnet range cannot overlap with virtual IP address %s."), $vip['subnet']);
-				}
-			}
-		}
-	}
+    
+    if ($config['virtualip']) {
+        if (is_array($config['virtualip']['vip'])) {
+            foreach ($config['virtualip']['vip'] as $vip) {
+                if ($vip['interface'] == $if) {
+                    if ($vip['subnet'] && is_inrange_v4($vip['subnet'], $_POST['range_from'], $_POST['range_to'])) {
+                        $input_errors[] = sprintf(gettext("The subnet range cannot overlap with virtual IP address %s."), $vip['subnet']);
+                    }
+                }
+            }
+        }
+    }
+    
 
 	$noip = false;
 	if (is_array($a_maps)) {
